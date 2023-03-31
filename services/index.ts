@@ -1,5 +1,5 @@
 export type TransactionDto = {
-  id: number;
+  id: string;
   buyerId: string;
   sellerId: string;
   escrowAgentId: string;
@@ -9,3 +9,8 @@ export type TransactionDto = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type UserDto = {
+  id: string
+  email: string
+}

@@ -57,11 +57,6 @@ const AppLayout = ({ children }: PropsWithChildren) => {
         <Header
           style={{ padding: 0, background: colorBgContainer, display: "flex" }}
         >
-          <Avatar
-            size={64}
-            icon={<UserOutlined />}
-            style={{ alignItems: "flex-end" }}
-          />
         </Header>
         <Content
           style={{

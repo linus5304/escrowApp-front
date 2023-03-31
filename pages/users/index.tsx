@@ -1,6 +1,8 @@
 import React from "react";
-import { Space, Table, Tag, Typography } from "antd";
+import { Space, Spin, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import usersApi from "../../services/users";
+import { UserDto } from "../../services";
 const { Title } = Typography;
 
 interface DataType {
@@ -11,84 +13,31 @@ interface DataType {
   tags: string[];
 }
 
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<UserDto> = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: text => <a>{text}</a>,
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_, { tags }) => (
-      <>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
+const index: React.FC = () => {
+  const { data: usersData, isLoading } = usersApi.useGetUsersQuery({});
 
-const index: React.FC = () => (
-  <>
-    <Title level={2}>Users</Title>
-    <Table columns={columns} dataSource={data} />
-  </>
-);
+  console.log("Users data", usersData);
+
+  if (isLoading) return <Spin />;
+  return (
+    <>
+      <Title level={2}>Users</Title>
+      <Table columns={columns} dataSource={usersData} />
+    </>
+  );
+};
 
 export default index;

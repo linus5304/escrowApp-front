@@ -1,7 +1,8 @@
 import React from "react";
-import { Space, Table, Tag, Typography } from "antd";
+import { Space, Spin, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import transactionApi from "../../services/transactions/transactions";
+import transactionApi from "../../services/transactions";
+import { TransactionDto } from "../../services";
 const { Title } = Typography;
 
 interface DataType {
@@ -12,87 +13,47 @@ interface DataType {
   tags: string[];
 }
 
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<TransactionDto> = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: text => <a>{text}</a>,
+    title: "Id",
+    dataIndex: "id",
+    key: "id",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "Buyer",
+    dataIndex: "buyerId",
+    key: "buyerId",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
+    title: "Seller",
+    dataIndex: "sellerId",
+    key: "sellerId",
   },
   {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_, { tags }) => (
-      <>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
   },
   {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
   },
 ];
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
+const data: TransactionDto[] = [];
 
 const index: React.FC = () => {
-  const { data: transactionData, isLoading } = transactionApi.useGetTransactionsQuery({});
+  const { data: transactionData, isLoading } =
+    transactionApi.useGetTransactionsQuery({});
 
-  console.log("Transaction data", transactionData)
+  console.log("Transaction data", transactionData);
+
+  if (isLoading) return <Spin />;
   return (
     <>
       <Title level={2}>Transactions</Title>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={transactionData} />
     </>
   );
 };
