@@ -1,6 +1,7 @@
 import React from "react";
 import { Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import transactionApi from "../../services/transactions/transactions";
 const { Title } = Typography;
 
 interface DataType {
@@ -84,11 +85,16 @@ const data: DataType[] = [
   },
 ];
 
-const index: React.FC = () => (
-  <>
-    <Title level={2}>Transactions</Title>
-    <Table columns={columns} dataSource={data} />
-  </>
-);
+const index: React.FC = () => {
+  const { data: transactionData, isLoading } = transactionApi.useGetTransactionsQuery({});
+
+  console.log("Transaction data", transactionData)
+  return (
+    <>
+      <Title level={2}>Transactions</Title>
+      <Table columns={columns} dataSource={data} />
+    </>
+  );
+};
 
 export default index;
